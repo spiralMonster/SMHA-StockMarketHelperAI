@@ -22,8 +22,7 @@ class StockMarketHelperTasks:
                            *Provide the information gathered about the stocks in a bulletin form.You should include this
                             information in the expected output format as provided.
                            
-                            *You have to provide a detail explanation about the stocks using their names from internet.
-                            It is expected from you to add answers to these questions in your explanation:
+                            *It is expected from you to add answers to these questions in your explanation:
                             
                                   *How does the company makes money?
                                   *Are its products or services in demand?
@@ -80,7 +79,7 @@ class StockMarketHelperTasks:
         return Task(
             description=dedent(f'''
             **Task** : Gather news which can affect the stock prices.
-            **Description** : Provide a detailed explanation in the form of bulletin that how those news will affect the
+            **Description** : Collect news and provide a detailed explanation in the form of bulletin that how those news will affect the
                               stock prices.
                               
                               The news article you can gather could be:
@@ -125,13 +124,21 @@ class StockMarketHelperTasks:
     def StockPredictorTask(self, agent, context: list):
         return Task(
             description=dedent(f'''
-                        **TASK**: Predict the profit or loss the user would make.
+                        **TASK**: Predict the profit or loss the user would make by using the historical data of the stocks.
                         
                         **Description**: You have to analyse the historical data regarding the stocks and predict whether 
                                          the user makes loss or profit and how much loss or profit the user can
                                          made at different timestamps.
-                                         So you have to provide that information for every month upto 3 months.
-                                         You can predict the profit/loss using the following features:
+                                         
+                                         *If the stock price at timestamp in future is greater than the price of the stock
+                                         at current timestamp then it is a profit otherwise it is a loss.
+                                         
+                                         *Calculate the profit/loss by subtracting the value of stock price in future and
+                                         stock price at current timestamp.
+                                         
+                                        *So you have to provide that information for every month upto 6 months.
+                                         
+                                         *You can predict the profit/loss using the following features:
                                                 * Data of observation
                                                 * Opening price
                                                 * Highest price during trading day
@@ -142,6 +149,10 @@ class StockMarketHelperTasks:
                                                 * News affecting the stocks
                                                 
                                         Here Close price is the dependent feature.
+                                        
+                                        *After predicting the values for stocks for upto 6 months then in the end provide
+                                        the time range in which the user can sell the stocks such that he can get maximum
+                                        possible profit.
                         **PARAMETERS**:
                         [Current Date]: {datetime.date.today().strftime("%d/%m/%Y")}
                         '''),
@@ -167,7 +178,7 @@ class StockMarketHelperTasks:
             description=dedent(f'''
                       **Task**: Analyse the historical data about stocks using their ticker symbol.
                       **Description**: You have to analyse the historical data about the stocks and provide various insights about
-                                it at every one month before upto 3 months back.You can provide insights on the following topics in bulletin form:
+                                it at every one month before upto 6 months back.You can provide insights on the following topics in bulletin form:
                                 
                                         * Opening price
                                         * Highest price during trading day

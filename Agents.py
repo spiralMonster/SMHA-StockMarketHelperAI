@@ -1,8 +1,13 @@
 from crewai import Agent
 from textwrap import dedent
-
+from Tools.SearchTool import search_tool
+from Tools.StockReviewer import stock_reviewer
+from Tools.StockHistory import stock_history
+from Tools.StockInformer import stock_informer
+from Tools.NewsFinder import news_finder
+from Tools.NameToTicker import name_to_ticker_symbol
+from Tools.CalculateStock_Profit_Loss import calculate
 class StockMarketHelperAgents:
-
     def StockFinder(self):
         return Agent(
             role="Stock Finder",
@@ -12,7 +17,10 @@ class StockMarketHelperAgents:
                       "invest in.",
             allow_delegation=True,
             verbose=True,
-            tools=[]
+            tools=[search_tool.search_internet,
+                   name_to_ticker_symbol.get_symbol,
+                   stock_informer.get_information,
+                   stock_reviewer.get_review]
 
         )
 
@@ -24,7 +32,7 @@ class StockMarketHelperAgents:
                       "ongoing events",
             allow_delegation=True,
             verbose=True,
-            tools=[]
+            tools=[news_finder.find_news]
         )
 
     def StockResearcher(self):
@@ -35,19 +43,19 @@ class StockMarketHelperAgents:
                       "stocks prices.",
             allow_delegation=True,
             verbose=True,
-            tools=[]
+            tools=[stock_history.get_history]
         )
 
     def StockPredictor(self):
         return Agent(
             role="Stock Predictor",
             goal="You have to give a detail explanation about when to sell a stock and how much profit or loss the "
-                 "user can expect.",
+                 "user can expect and also predict the various values about stock after every one month.",
             backstory="You are an experienced Data Scientist who will predict the profit or loss made by selling the "
                       "stock in a given time period.",
             allow_delegation=True,
             verbose=True,
-            tools=[]
+            tools=[stock_history.get_history,calculate]
         )
 
 
