@@ -8,6 +8,9 @@ from dateutil.relativedelta import relativedelta
 class stock_history:
     @tool("Get the historical data about stocks from their ticker symbol")
     def get_history(query):
+        """
+        Gather the historical data about the stock market and return it.
+        """
         current_date=datetime.date.today()
         prev_date=current_date-relativedelta(months=6)
         url="https://api.marketdata.app/v1/stocks/candles"

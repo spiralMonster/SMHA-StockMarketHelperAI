@@ -7,6 +7,9 @@ from bs4 import BeautifulSoup
 class stock_reviewer:
     @tool("Get reviews about the stock from its ticker symbol")
     def get_review(query):
+        """
+        Gather the reviews about the stocks of the company across different platforms and return it.
+        """
         num_of_reviews=5
         url='https://reviewindexapi.datashake.com/profiles'
         params={

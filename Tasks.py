@@ -1,7 +1,10 @@
 from crewai import Task
 from textwrap import dedent
 import datetime
+from dateutil.relativedelta import relativedelta
 
+current_date=datetime.date.today()
+prev_date=current_date-relativedelta(months=1)
 
 class StockMarketHelperTasks:
 
@@ -75,10 +78,10 @@ class StockMarketHelperTasks:
 
         )
 
-    def StockAnalystTask(self, agent, location, time_range, context: list):
+    def StockAnalystTask(self, agent, location, context: list):
         return Task(
             description=dedent(f'''
-            **Task** : Gather news which can affect the stock prices.
+            **Task** : Gather news which can affect the stock prices you have gathered.
             **Description** : Collect news and provide a detailed explanation in the form of bulletin that how those news will affect the
                               stock prices.
                               
@@ -100,7 +103,7 @@ class StockMarketHelperTasks:
                               
             **Parameters** : You can use the following parameters to gather the news articles:
                              [LOCATION]: {location}
-                             [TIME RANGE]: {time_range}
+                             [TIME RANGE]: From-{prev_date} To-{current_date}
             '''),
 
             expected_output=dedent(f'''
@@ -124,7 +127,8 @@ class StockMarketHelperTasks:
     def StockPredictorTask(self, agent, context: list):
         return Task(
             description=dedent(f'''
-                        **TASK**: Predict the profit or loss the user would make by using the historical data of the stocks.
+                        **TASK**: Predict the profit or loss the user would make by using the historical data of the stocks 
+                                  you have collected.
                         
                         **Description**: You have to analyse the historical data regarding the stocks and predict whether 
                                          the user makes loss or profit and how much loss or profit the user can

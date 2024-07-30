@@ -6,6 +6,9 @@ import requests
 class search_tool:
     @tool("Search the internet")
     def search_internet(query):
+        """
+        Search the relevant results from the internet and return it.
+        """
         top_results_to_return=4
         url='https://serper.dev/search'
         payload=json.dumps({"q":query})

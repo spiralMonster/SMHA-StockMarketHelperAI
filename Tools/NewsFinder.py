@@ -6,6 +6,9 @@ import requests
 class news_finder:
     @tool("Find the News")
     def find_news(query):
+        """
+        Find the relevant news articles affecting the stocks of the company.
+        """
         num_of_results=5
         url='https://newsapi.org/v2/everything?'
         headers={'apiKey':os.environ['NEWS_API_KEY']}
