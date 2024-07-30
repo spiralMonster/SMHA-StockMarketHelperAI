@@ -12,7 +12,7 @@ class StockMarketHelperTasks:
         return Task(
             description=dedent(f'''
             
-            **Task**:Find top 5 stocks in which the agent can invest depending upon the current scenario.
+            **Task**:Find top stocks in which the agent can invest depending upon the current scenario.
             
             **Description**:
                            *You have to search top 5 stocks depending upon the current scenario and user preferences from 
@@ -20,7 +20,6 @@ class StockMarketHelperTasks:
                            
                            *Then get the ticker symbols for these stocks.
                            
-                           *Get information about these stocks using the ticker symbols obtained from the previous task.
                            
                            *Provide the information gathered about the stocks in a bulletin form.You should include this
                             information in the expected output format as provided.
@@ -34,7 +33,16 @@ class StockMarketHelperTasks:
                                   *Is the company positioned for growth and profitability?
                                   *How much debt does the company have?
                                   
-                            *Try to include the reviews about the stock using the ticker symbols.
+                            *Gather all these information from internet using search tool and add it in appropriate location
+                             in the expected output.
+                                  
+                            *Try to include the reviews about the stock use ticker symbol as input to get and include it under
+                            appropriate location in expected output.
+                            
+                            **Compulsion: You have to provide at least top 5 stocks
+                            
+                            **Important Note:First complete all tasks of one stock then start the task of other one.
+                                            Add output of the other stock just below the output of previous stock
                             
             **Parameters:You can use the following parameters to find the top 5 stocks for the user to invest in:
               [Location]: {location}
@@ -52,7 +60,17 @@ class StockMarketHelperTasks:
                 
                 **COMPANY NAME**:
                 
-                **PRICE OF THE STOCK** :
+                **TICKER SYMBOL OF THE COMPANY**:
+                
+                **OPENING PRICE OF THE STOCK** :
+                
+                **CLOSING PRICE OF THE STOCK**:
+                
+                **LOWEST PRICE OF THE STOCK DURING DAY**:
+                
+                **HIGHEST PRICE OF THE STOCK DURING DAY**:
+                
+                **VOLUME OF THE STOCK**:
                 
                 **PRODUCTS AND SERVICES OFFERED BY THE COMPANY** :
             
@@ -101,13 +119,16 @@ class StockMarketHelperTasks:
                               
                               Using these news article give a proper explanation about how these news will affect the stock price both in positive and negative way.
                               
+                              *Compulsion: You have to provide at least 3 to 5 news for each stock gathered by the stock 
+                              finder task.
+                              
             **Parameters** : You can use the following parameters to gather the news articles:
                              [LOCATION]: {location}
                              [TIME RANGE]: From-{prev_date} To-{current_date}
             '''),
 
             expected_output=dedent(f'''
-                       Provide at least 3-5 news and how do they affect the stock with proper explanation.
+                       
                        
                        -----Factors Affecting Stock------
                        
@@ -130,7 +151,7 @@ class StockMarketHelperTasks:
                         **TASK**: Predict the profit or loss the user would make by using the historical data of the stocks 
                                   you have collected.
                         
-                        **Description**: You have to analyse the historical data regarding the stocks and predict whether 
+                        **Description**: Collect the historical data regarding the stocks and predict whether 
                                          the user makes loss or profit and how much loss or profit the user can
                                          made at different timestamps.
                                          
@@ -148,14 +169,12 @@ class StockMarketHelperTasks:
                                                 * Highest price during trading day
                                                 * Lowest price during trading day
                                                 * Close price
-                                                * Close price adjusted for stock splits and dividends
-                                                * Number of shares traded during trading day
                                                 * News affecting the stocks
                                                 
                                         Here Close price is the dependent feature.
                                         
                                         *After predicting the values for stocks for upto 6 months then in the end provide
-                                        the time range in which the user can sell the stocks such that he can get maximum
+                                        the time range in which the user can sell the stocks such that they can get maximum
                                         possible profit.
                         **PARAMETERS**:
                         [Current Date]: {datetime.date.today().strftime("%d/%m/%Y")}
@@ -180,23 +199,50 @@ class StockMarketHelperTasks:
     def StockResearcherTask(self,agent,context:list):
         return Task(
             description=dedent(f'''
-                      **Task**: Analyse the historical data about stocks using their ticker symbol.
-                      **Description**: You have to analyse the historical data about the stocks and provide various insights about
-                                it at every one month before upto 6 months back.You can provide insights on the following topics in bulletin form:
-                                
-                                        * Opening price
-                                        * Highest price during trading day
-                                        * Lowest price during trading day
-                                        * Close price
-                                        * Volume
+                      **Task**: Collect historical data about stocks using their ticker symbol.
+                      **Description**: 
+                                      *Using the ticker symbol of the stock get the historical data about those stocks.
+                                      
+                                      *The historical data consist of the following points:
+                                      
+                                            *Opening price of the stock
+                                            *Highest price during trading day
+                                            *Lowest price during trading day
+                                            *Closing price of the stock
+                                            *Volume of the stock
                                         
-                                Compare these values with their current values and also provide a detailed explanation about it.
-                                
+                                     *Compare these values of the stock with their current values and also provide a 
+                                     detailed explanation about how these parameters change with the current values of stock.
+                                     
+                                     *Compulsion:You have to provide all the mentioned information for every month in the
+                                      expected output format as provided.
+            
+            
                       **Parameters**:
                         [Current Date]: {datetime.date.today().strftime("%d/%m/%Y")}
                     '''
 
             ),
+            expected_output=dedent(f"""
+                            
+                               ---------------Stock Researcher-----------------
+                               
+                               *DATE:
+                               
+                               *Average Opening Price of Stock:
+                               
+                               *Average Closing Price of Stock:
+                               
+                               *Average Highest Price of Stock:
+                               
+                               *Average Lowest Price of Stock:
+                               
+                               *Average Volume of Stock:
+                               
+                               *Explanation how these values differ from current stock values:
+
+
+        """),
             agent=agent,
             context=context,
             asyn_execution=True
