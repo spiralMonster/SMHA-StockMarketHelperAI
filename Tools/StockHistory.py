@@ -9,21 +9,40 @@ class stock_history:
         """
         Get the historical data about the stock using their ticker symbols for past 6 months.
         """
-        url='https://api.twelvedata.com/time_series'
-        headers={
-            'symbol':query,
-            'interval':"6month",
-            'apikey':os.environ['TWELVE_DATA_API_KEY']
-        }
-        response=requests.request("GET",url,headers=headers)
+        url = f"https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol={query}&apikey={os.environ['ALPHA_VANTAGE_API_KEY']}"
+        num_of_months=6
+        ind=0
+        response=requests.get(url)
+        if response.json() is not None:
+            results=response.json()['Monthly Adjusted Time Series']
+            data=[]
+            for dates,values in results.items():
+                try:
+                    data.append("\n".join([
+                        f"Date: {dates}",
+                        f"Opening Price of Stock: {values['1. open']}",
+                        f"Closing Price of Stock: {values['4. close']}",
+                        f"Highest Price of Stock: {values['2. high']}",
+                        f"Lowest Price of Stock: {values['3. low']}",
+                        f"Adjusted Closing Price of Stock: {values['5. adjusted close']}",
+                        f"Volume of Stock: {values['6. volume']}",
+                        f"\n-------------------------------------"
 
-        if response.json()['values']:
-            results=response.json()['values']
+                    ]))
+                    ind+=1
+                except KeyError:
+                    print("Sorry an unexpected error occur!!!")
+
+                if ind==num_of_months:
+                    break
+
+            return "\n".join(data)
 
         else:
-            print("Sorry we are unable to process your request")
+            print("Sorry not able to process your request right now.")
 
-        return results
+
+
 
 
 
